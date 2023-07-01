@@ -134,7 +134,7 @@ grid_col <- c("#a4843c", "#5b388b", "#57c46c", "#c973c6",
 
 ## Set arrow colors
 
-arrow_col <- colorRampPalette(list("#856705", "#d3d3d3","#113069"))(17)
+arrow_col <- colorRampPalette(list("#856705", "#d3d3d3","#113069"))(17) # this would create 17 colors from the 3 specified colors 
 
 ## Open plot save graphic
 
@@ -146,7 +146,7 @@ circos.clear()
 circos.par(start.degree = 165, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
 par(cex = 1)
 
-## Build Base plot
+## Build base plot
 
 chordDiagram(chord_test_pacific, 
              grid.col = grid_col, 
@@ -164,57 +164,47 @@ chordDiagram(chord_test_pacific,
              preAllocateTracks = list(track.height = max(strwidth(unlist(dimnames(chord_test_pacific))))))
 
 ## Go back to the first track and customize sector labels
+
 circos.trackPlotRegion(
   track.index = 1,
   panel.fun = function(x, y) {
     circos.text(CELL_META$xcenter, CELL_META$ylim[1], CELL_META$sector.index, 
                 facing = "clockwise", cex = 1.4, font = 3, niceFacing = TRUE, adj = c(-0.255, 0.5))
     
-  }, bg.border = NA) # here set bg.border to NA is important
+  }, bg.border = NA) # here setting bg.border to NA is important
 
 dev.off()
 
+##**********************************************
+## Figure 6a (Chord Diagram::Indian) ----------- 
+##**********************************************
 
-
-#******************************
-#Chord Diagram (Indian)-------
-#******************************
-#*
-
-# Set color palette 1
+## Set grid color for each species manually
 
 colorsecInd <- c("#a4843c", "#5b388b", "#57c46c","#c973c6",
                  "#98b342", "#6d80d8", "#d1a13a","#8d2c66",
                  "#5eb676","#d76092", "#43c9b0", "#cf4f42",
                  "#5f8938", "#be4a5b","#ce7239","#98432a")
 
-# Set color palette 2
+## Set arrow colors
 
-colorsecInd2 <- colorRampPalette(list("#93a24e", "#d3d3d3","#ba4d4c"))(17)
+arrow_col_ind <- colorRampPalette(list("#93a24e", "#d3d3d3","#ba4d4c"))(17) # this would create 17 colors from the 3 specified colors 
 
-# color palette 3
+## Open plot save graphics
 
-mycolor <- viridis(17, alpha = 1, begin = 0, end = 1, option = "D")
-mycolor <- mycolor[sample(1:17)]
+png("~/Desktop/Figure 6b.png",width = 6700, height = 6000, units = "px", res = 600, bg = "white")
 
-# color palette 4
-
-cols <- hcl.colors(17, "Temps")
-
-# Open plot save graphics
-png("~/Desktop/Chord_indian2510222.png",width=6700,height=6000,units="px",res=600,bg="white")
-
-#Set circular layout parameters
+## Set circular layout parameters
 
 circos.clear()
 circos.par(start.degree = 170, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
 par(cex = 1)
 
-# Base plot
+## Base plot
 
 chordDiagram(chord_test_Indian, 
              grid.col = colorsecInd, 
-             col = colorsecInd2,
+             col = arrow_col_ind,
              big.gap = 20,
              transparency = 0.25,
              link.sort = TRUE, 
@@ -227,7 +217,7 @@ chordDiagram(chord_test_Indian,
              scale = FALSE,
              preAllocateTracks = list(track.height = max(strwidth(unlist(dimnames(chord_test_Indian))))))
 
-# we go back to the first track and customize sector labels
+## Go back to the first track and customize sector labels
 
 circos.trackPlotRegion(
   track.index = 1,
@@ -238,33 +228,6 @@ circos.trackPlotRegion(
   }, bg.border = NA) # here set bg.border to NA is important
 
 dev.off()
-
---------
-  
-  ggplot(size_fire_explor, aes(x = Age)) +
-  geom_line(aes(y = R), color = "red") +
-  geom_line(aes(y = B), color = "blue") +
-  geom_line(aes(y = G), color = "green")
-
-
-ggplot(size_fire_explor, aes(x = Age)) +
-  geom_rect(aes(xmin = 1, xmax = 30, 
-                ymin = 0, ymax = 5),
-            color = "#2C77BF", 
-            fill = alpha("#2C77BF", .5)) +
-  
-  ggplot(size_fire_explor) + 
-  geom_tile(aes(x = Age, y = R, fill = R)) +
-  scale_y_continuous(limits=c(-0.3,0.2),breaks=1) +
-  scale_fill_gradient2(low = 'blue', mid = 'white', high = 'red', midpoint = -0.05) +
-  theme_minimal()
-
-expl <- ggplot(size_fire_explor, aes(x = Age)) + 
-  geom_line(aes(y = R), color = "red")
-
-
-expl + geom_rect(aes(xmin = 2, xmax = 43, ymin = -0.35, ymax = -0.31), color = size_fire_explor$B) +
-  gradient_color(aes(color = "red"))
 
 ##**********************************************************************************************************************************##
 ## End of Script --------
