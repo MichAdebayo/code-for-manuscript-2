@@ -13,11 +13,16 @@
 ## Load Packages -----------
 ##**************************
 
-library("ggplot2")
+library(ggplot2)
+library(tidyverse)
+library(viridis)
+library(patchwork)
+library(hrbrthemes)
+library(circlize)
 
-##****************************************************
-## Figure 5 (Pacific vs Human Recognition) -----------
-##****************************************************
+##*****************************************************
+## Figure 5a (Pacific vs Human Recognition) -----------
+##*****************************************************
 
 Pacific_cnn <- ggplot(Pacific_CNN_vs_Human, # specify data object
                       aes(x = Human, y = Machine)) + # specify columns for x and y axes 
@@ -56,9 +61,9 @@ jpeg("~/Desktop/Figure 5a.jpg",width = 6700, height = 6000, units = "px",res = 6
 Pacific_cnn # save the new figure object in jpeg format
 dev.off()
 
-##********************************************
-## Indian CNN vs Human Recognition -----------
-##********************************************
+##********************************************************
+## Figure 5b (Indian CNN vs Human Recognition) -----------
+##********************************************************
 
 Indian_cnn <- ggplot(Indian_CNN_vs_Human, # specify data object
                      aes(x = Human, y = Machine)) + # specify columns for x and y axes 
@@ -97,72 +102,55 @@ jpeg("~/Desktop/Figure 5b.jpg",width = 6700, height = 6000, units = "px", res = 
 Indian_cnn # save the new figure object in jpeg format
 dev.off()
 
-#******************************
-#Chord Diagram (Pacific)-------
-#******************************
-#*
+##***********************************************
+## Figure 6a (Chord Diagram::Pacific) -----------
+##***********************************************
 
-# Libraries
+## Grid color guide
 
-library(tidyverse)
-library(viridis)
-library(patchwork)
-library(hrbrthemes)
-library(circlize)
-
------
-  
-  #colors <- c(G. bulloides = "#a4843c",
-  #G. glutinata = "#5b388b",
-  #G. siphonifera = "#57c46c",
-  #T. sacculifer = "#c973c6",
-  #G. elongatus = "#98b342",
-  # G. ruber = "#6d80d8",
-  # G. rubescens = #d1a13a",
-  # G. tenella = "#8d2c66",
-  # G. menardii = "#5eb676",
-  # G. tumida = "#d76092"
+# colors <- c(G. bulloides = "#a4843c",
+# G. glutinata = "#5b388b",
+# G. siphonifera = "#57c46c",
+# T. sacculifer = "#c973c6",
+# G. elongatus = "#98b342",
+# G. ruber = "#6d80d8",
+# G. rubescens = #d1a13a",
+# G. tenella = "#8d2c66",
+# G. menardii = "#5eb676",
+# G. tumida = "#d76092"
 # G. ungulata = "#43c9b0",
-# N.dutertrei = #cf4f42",
+# N. dutertrei = #cf4f42",
 # N. incompta = "#5f8938",
 # O. universa = "#be4a5b",
 # P. obliquiloculata = "#ce7239",
 # Fragments = "#98432a")
 
-# color palette 1
+## Set grid color for each species manually
 
-colork <- c("#a4843c", "#5b388b", "#57c46c","#c973c6",
-            "#98b342", "#6d80d8", "#d1a13a","#8d2c66",
-            "#5eb676","#d76092", "#43c9b0", "#cf4f42",
-            "#5f8938", "#be4a5b","#ce7239","#98432a")
+grid_col <- c("#a4843c", "#5b388b", "#57c46c", "#c973c6", 
+              "#98b342", "#6d80d8", "#d1a13a", "#8d2c66",
+              "#5eb676", "#d76092", "#43c9b0", "#cf4f42",
+              "#5f8938", "#be4a5b", "#ce7239", "#98432a")
 
-# color palette 2
+## Set arrow colors
 
-colorgrd <- colorRampPalette(list("#856705", "#d3d3d3","#113069"))(17)
+arrow_col <- colorRampPalette(list("#856705", "#d3d3d3","#113069"))(17)
 
-# color palette 3
+## Open plot save graphic
 
-mycolor <- viridis(17, alpha = 1, begin = 0, end = 1, option = "D")
-mycolor <- mycolor[sample(1:17)]
+png("~/Desktop/Figure 6a.png", width = 6700, height = 6000, units = "px", res = 600, bg = "white")
 
-# color palette 4
-
-cols <- hcl.colors(17, "Temps")
-
-# Open plot save graphics
-png("~/Desktop/Chord_pacific25102022.png",width=6700,height=6000,units="px",res=600,bg="white")
-
-#Set circular layout parameters
+## Set circular layout parameters
 
 circos.clear()
 circos.par(start.degree = 165, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
 par(cex = 1)
 
-# Base plot
+## Build Base plot
 
 chordDiagram(chord_test_pacific, 
-             grid.col = colork, 
-             col = colorgrd,
+             grid.col = grid_col, 
+             col = arrow_col,
              big.gap = 20,
              transparency = 0.25,
              link.sort = TRUE, 
@@ -175,7 +163,7 @@ chordDiagram(chord_test_pacific,
              scale = FALSE,
              preAllocateTracks = list(track.height = max(strwidth(unlist(dimnames(chord_test_pacific))))))
 
-# we go back to the first track and customize sector labels
+## Go back to the first track and customize sector labels
 circos.trackPlotRegion(
   track.index = 1,
   panel.fun = function(x, y) {
