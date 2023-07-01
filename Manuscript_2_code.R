@@ -1,110 +1,101 @@
-#*********************
-#Funnel Chart---------
-#*********************
+##**********************************************************************************************************************************##
+## Written by Michael B. Adebayo, PhD Student in de Garidel-Thoron lab, (2019 – 2023)                                               ##
+## Centre européen de recherche et d'enseignement de géosciences de l'environnement (CEREGE), Aix-en-Provence                       ##
+## Aix-Marseille University, France                                                                                                 ##
+## Code related to figures in Thesis Chapter 3 (Chapter to be submitted as a technical note to Biogeosciences Journal)              ##
+##**********************************************************************************************************************************##
 
-# Top 5 misidentified species by the Pacific CNN 
+##***********************************************************************************************************************************##
+## Manuscript Title: Evaluation of the generalized application of convolutional neural networks (CNN) to different dataset sources   ##
+##***********************************************************************************************************************************##
 
-fig1 <- plot_ly() 
-fig1 <- fig1 %>%
-            marker = list(color = c("#3B528B", "#3B528B", "#3B528B", "#3B528B", "#3B528B"),
-                          line = list(width = c(1,1,1,1,1), color = c("white", "white", "white", "white", "white"))))
+##**************************
+## Load Packages -----------
+##**************************
 
+library("ggplot2")
 
-fig1 <- fig1 %>%
-  layout(yaxis = list(categoryorder = "trace", size = 18, visible = FALSE),annotations = list("<i></i>")) 
-fig1
+##****************************************************
+## Figure 5 (Pacific vs Human Recognition) -----------
+##****************************************************
 
+Pacific_cnn <- ggplot(Pacific_CNN_vs_Human, # specify data object
+                      aes(x = Human, y = Machine)) + # specify columns for x and y axes 
+  geom_point(aes(color = Species, shape = Species), # add color and shape by species
+             size = 8) + # set point size
+  geom_smooth(method = "lm", # fit linear model
+              se=F, # do not show confidence interval
+              size = .5, # set size of regression line
+              color = 'black') + # set regression line color
+  scale_color_manual(aesthetics = "colour", # specify the color representing each species manually
+                     values = c("#DC050C", "#67c675", "#72190E", "#6a70d7", "#6aa13f",
+                                "#ce9534", "#6d8bd6", "#cd6d3b", "#33d4d1", "#c9417e",
+                                "#47bb8a", "#a54190", "#4a6e24", "#ca86ce", "#af9e4d", 
+                                "#802657", "#72190E", "#dd5858", "#42150A", "#b44555")) + 
+  scale_shape_manual(values = c(1, 5, 7, 8, 9, 11, 12, 13, 14, 15, # specify the shape representing each species manually
+                                16, 17, 18, 19, 20, 21, 22, 23, 3, 24)) + 
+  theme_bw() + # set background to white
+  theme(axis.line  = element_line(colour = "black", size = 0), # set x and y axis line color
+        panel.border = element_rect(colour = "black", fill = NA, size = 1), # format panel border color and set border size
+        panel.grid.minor = element_blank(), # remove minor grid lines in figure
+        panel.grid.major = element_blank()) + # remove major grid lines in figure
+  theme(axis.text = element_text(size = 20, colour = "black"), # set axis text size and color
+        axis.title = element_text(size=22, colour = "black")) + # set axis title text size and color
+  theme(legend.text = element_text(face = "italic", size = 18)) + # set legend text format and size
+  guides(shape = guide_legend(override.aes = list(size = 8))) + # override the initial size of the shapes shown in the legend section and specify new size for the shapes
+  theme(legend.title = element_text(size = 19)) + # set legend title text size
+  annotate("text", x = 2500, y = 14000, size = 7.5, # specify position and size of text to be annotated
+           label = "italic(ρ)==0.94*','~italic(p)", parse = TRUE) + # add the text to be annotated
+  annotate("text", x = 5300, y = 14000, size = 7.5, # specify position and size of second text to be annotated
+           label = "< 2.2e-16") + # add the text to be annotated
+  labs(y = expression("Pacific CNN"), x = expression("Human Experts")) # add titles for x and y axes
 
-# Top 5 misidentified species by the Indian CNN 
+## Export Figure as JPG
 
-fig2 <- plot_ly() 
-fig2 <- fig2 %>%
-  add_trace(type = "funnel",
-            y = c("<i>G. elongatus</i>", "<i>G. ungulata</i>","<i>G. tenella</i>", "<i>O. Universa</i>", "<i>G. tumida</i>"),
-            x = c(90, 55, 32, 32, 30),
-            textposition = "inside",
-            textfont = list(family = "Old Standard TT, Arial", size = 24, color = "white"),
-            textinfo = "label+value",
-            opacity = 0.90,
-            connector = list(line = list(color = "white", width = 3)),
-            marker = list(color = c("#b94b75", "#b94b75", "#b94b75", "#b94b75", "#b94b75"),
-                          line = list(width = c(1,1,1,1,1), color = c("white", "white", "white", "white", "white"))))
-
-fig2 <- fig2 %>%
-  layout(yaxis = list(categoryorder = "trace", size = 18, visible = FALSE)) 
-fig2 
-
-
-#**************************************
-#Pacific vs Human Recognition----------
-#**************************************
-#*
-
-Pacific_cnn <- ggplot(Pacific_CNN_vs_Human,
-                      aes(x = Human, y = Machine)) + 
-  geom_point(aes(color = Species, shape = Species), size = 8) + 
-  geom_smooth(method="lm",se=F, size = .5, color = 'black') + 
-  scale_color_manual(aesthetics = "colour", values = c("#DC050C","#67c675", #72190E,  "#6a70d7", "#6aa13f",
-                                                       "#ce9534","#6d8bd6","#cd6d3b", "#33d4d1","#c9417e",
-                                                       "#47bb8a", "#a54190", "#4a6e24","#ca86ce", "#af9e4d", 
-                                                       "#802657", "#72190E","#dd5858","#42150A", "#b44555")) + 
-  scale_shape_manual(values = c(1,5,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23,3,24)) + 
-  theme_bw() + 
-  theme(axis.line  = element_line(colour = "black",size=0), 
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor = element_blank(), panel.grid.major = element_blank()) + 
-  theme(axis.text=element_text(size = 20, colour = "black"),
-        axis.title=element_text(size=22, colour = "black")) +
-  theme(legend.text = element_text(face = "italic", size = 18)) + 
-  guides(shape = guide_legend(override.aes = list(size = 8))) + 
-  theme(legend.title = element_text(size = 19)) + 
-  annotate("text", x = 2500, y = 14000, size = 7.5, 
-           label = "italic(ρ)==0.94*','~italic(p)", parse = TRUE) +
-  annotate("text", x = 5300, y = 14000, size = 7.5, 
-           label = "< 2.2e-16") +
-  labs(y = expression("Pacific CNN"), x = expression("Human Experts"))
-
-#Export Figure as JPG
-
-jpeg("~/Desktop/Pacific_cnn_vs_human_05102022.jpg",width=6700,height=6000,units="px",res=600,bg="white")
-Pacific_cnn
+jpeg("~/Desktop/Figure 5a.jpg",width = 6700, height = 6000, units = "px",res = 600, bg = "white")
+Pacific_cnn # save the new figure object in jpeg format
 dev.off()
 
-#**************************************
-#Indian CNN vs Human Recognition-------
-#**************************************
-#*
+##********************************************
+## Indian CNN vs Human Recognition -----------
+##********************************************
 
-Indian_cnn <- ggplot(Indian_CNN_vs_Human,
-                     aes(x = Human, y = Machine)) + 
-  geom_point(aes(color = Species, shape = Species), size = 8) + 
-  geom_smooth(method="lm",se=F, size = .5, color = 'black') + 
-  scale_color_manual(aesthetics = "colour", values = c("#DC050C","#67c675", #72190E,  "#6a70d7", "#6aa13f",
-                                                       "#ce9534","#6d8bd6","#cd6d3b", "#33d4d1","#c9417e",
-                                                       "#47bb8a", "#a54190", "#4a6e24","#ca86ce", "#af9e4d", 
-                                                       "#802657", "#72190E","#dd5858","#42150A", "#b44555")) + 
-  scale_shape_manual(values = c(1,5,7,8,9,11,12,13,14,15,16,17,18,19,20,21,22,23,3,24)) + 
-  theme_bw() + 
-  theme(axis.line  = element_line(colour = "black",size=0), 
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor = element_blank(), panel.grid.major = element_blank()) + 
-  theme(axis.text=element_text(size = 20, colour = "black"),
-        axis.title=element_text(size=22, colour = "black")) +
-  theme(legend.text = element_text(face = "italic", size = 18)) + 
-  guides(shape = guide_legend(override.aes = list(size = 8))) + 
-  theme(legend.title = element_text(size = 19)) + 
-  annotate("text", x = 2500, y = 14000, size = 7.5, 
-           label = "italic(ρ)==0.99*','~italic(p)", parse = TRUE) +
-  annotate("text", x = 5700, y = 14000, size = 7.5, 
-           label = "< 2.2e-16") +
-  labs(y = expression("Indian CNN"), x = expression("Human Experts"))
+Indian_cnn <- ggplot(Indian_CNN_vs_Human, # specify data object
+                     aes(x = Human, y = Machine)) + # specify columns for x and y axes 
+  geom_point(aes(color = Species, shape = Species), # add color and shape by species
+             size = 8) + # set point size
+  geom_smooth(method="lm", # fit linear model
+              se=F, # do not show confidence interval
+              size = .5, # set size of regression line
+              color = 'black') + # set regression line color
+  scale_color_manual(aesthetics = "colour", # specify the color representing each species manually
+                     values = c("#DC050C", "#67c675", "#72190E", "#6a70d7", "#6aa13f",
+                                "#ce9534", "#6d8bd6", "#cd6d3b", "#33d4d1", "#c9417e",
+                                "#47bb8a", "#a54190", "#4a6e24", "#ca86ce", "#af9e4d", 
+                                "#802657", "#72190E", "#dd5858", "#42150A", "#b44555")) + 
+  scale_shape_manual(values = c(1, 5, 7, 8, 9, 11, 12, 13, 14, 15, # specify the shape representing each species manually
+                                16, 17, 18, 19, 20, 21, 22, 23, 3, 24)) + 
+  theme_bw() + # set background to white
+  theme(axis.line  = element_line(colour = "black",size=0), # set x and y axis line color
+        panel.border = element_rect(colour = "black", fill = NA, size = 1), # format panel border color and set border size
+        panel.grid.minor = element_blank(), # remove minor grid lines in figure
+        panel.grid.major = element_blank()) + # remove major grid lines in figure
+  theme(axis.text = element_text(size = 20, colour = "black"), # set axis text size and color
+        axis.title = element_text(size = 22, colour = "black")) + # set axis title text size and color
+  theme(legend.text = element_text(face = "italic", size = 18)) + # set legend text format and size
+  guides(shape = guide_legend(override.aes = list(size = 8))) + # override the initial size of the shapes shown in the legend section and specify new size for the shapes
+  theme(legend.title = element_text(size = 19)) + # set legend title text size
+  annotate("text", x = 2500, y = 14000, size = 7.5, # specify position and size of text to be annotated
+           label = "italic(ρ)==0.99*','~italic(p)", parse = TRUE) + # add the text to be annotated
+  annotate("text", x = 5700, y = 14000, size = 7.5, # specify position and size of the second text to be annotated
+           label = "< 2.2e-16") + # add the second text to be annotated
+  labs(y = expression("Indian CNN"), x = expression("Human Experts")) # add titles for x and y axes
 
-#Export Figure as JPG
+## Export Figure as JPG
 
-jpeg("~/Desktop/Indian_cnn_vs_human_05102022.jpg",width=6700,height=6000,units="px",res=600,bg="white")
-Indian_cnn
+jpeg("~/Desktop/Figure 5b.jpg",width = 6700, height = 6000, units = "px", res = 600, bg = "white")
+Indian_cnn # save the new figure object in jpeg format
 dev.off()
-
 
 #******************************
 #Chord Diagram (Pacific)-------
@@ -287,5 +278,7 @@ expl <- ggplot(size_fire_explor, aes(x = Age)) +
 expl + geom_rect(aes(xmin = 2, xmax = 43, ymin = -0.35, ymax = -0.31), color = size_fire_explor$B) +
   gradient_color(aes(color = "red"))
 
-
+##**********************************************************************************************************************************##
+## End of Script --------
+##**********************************************************************************************************************************##
 
