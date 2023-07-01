@@ -173,10 +173,12 @@ circos.trackPlotRegion(
     
   }, bg.border = NA) # here setting bg.border to NA is important
 
+## Close plot save graphics
+
 dev.off()
 
 ##**********************************************
-## Figure 6a (Chord Diagram::Indian) ----------- 
+## Figure 6b (Chord Diagram::Indian) ----------- 
 ##**********************************************
 
 ## Set grid color for each species manually
@@ -226,6 +228,8 @@ circos.trackPlotRegion(
                 facing = "clockwise", cex = 1.4, font = 3, niceFacing = TRUE, adj = c(-0.255, 0.5))
     
   }, bg.border = NA) # here set bg.border to NA is important
+
+## Close plot save graphics
 
 dev.off()
 
